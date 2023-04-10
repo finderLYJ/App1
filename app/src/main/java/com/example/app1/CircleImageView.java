@@ -68,6 +68,9 @@ public class CircleImageView extends androidx.appcompat.widget.AppCompatImageVie
             canvas.drawCircle(mRadius, mRadius, mRadius, mPaint);
         } else {
             super.onDraw(canvas);
+
+
+
         }
     }
 }
