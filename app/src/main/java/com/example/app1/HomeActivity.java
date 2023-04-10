@@ -36,7 +36,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         toolbar=findViewById(R.id.home_toolbar);
         toolbar.setTitle("");
         //设置toolbar对象
-        setSupportActionBar(toolbar);
+       setSupportActionBar(toolbar);
 
         toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override

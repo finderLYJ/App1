@@ -6,6 +6,7 @@ import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
 import android.content.Intent;
+import android.content.res.AssetFileDescriptor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -21,10 +22,17 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.VideoView;
 
+import androidx.annotation.InterpolatorRes;
 import androidx.appcompat.app.AppCompatActivity;
 
+import org.tensorflow.lite.Interpreter;
+
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.MappedByteBuffer;
+import java.nio.channels.FileChannel;
+import java.util.Arrays;
 import java.util.UUID;
 
 public class FirstActivity extends AppCompatActivity {
@@ -176,7 +184,33 @@ public class FirstActivity extends AppCompatActivity {
                 break;
         }
     }
+    private float[] classifyInput(float[] input){
+        //加载模型
+        Interpreter tflite = null;
+        try {
+            tflite = new Interpreter(loadModeFile());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
 
+        //准备输出
+        float[] output = new float[5];
+
+        //运行模型
+        tflite.run(input,output);
+
+        //返回
+        return output;
+
+    }
+    private MappedByteBuffer loadModeFile() throws IOException{
+        AssetFileDescriptor fileDescriptor = (FirstActivity.this).getAssets().openFd("model.tflite");
+        FileInputStream inputStream = new FileInputStream(fileDescriptor.getFileDescriptor());
+        FileChannel fileChannel = inputStream.getChannel();
+        long startOffset = fileDescriptor.getStartOffset();
+        long declaredLength = fileDescriptor.getDeclaredLength();
+        return fileChannel.map(FileChannel.MapMode.READ_ONLY,startOffset,declaredLength);
+    }
     //接收数据线程
     Thread readThread=new Thread(){
 
@@ -210,8 +244,14 @@ public class FirstActivity extends AppCompatActivity {
                             }
                             n++;
                         }
+                        float[] input = new float[5];
                         String s = new String(buffer_new,0,n);
-                        smsg+=s;   //写入接收缓存
+                        String[] msg = s.split(" ");
+                        for(int k = 0; k < 5; k++){
+                            input[k] = Float.parseFloat(msg[k]);
+                        }
+                        float[] output = classifyInput(input);
+                        smsg= Arrays.toString(output);   //写入接收缓存
                         if(is.available()==0)break;  //短时间没有数据才跳出进行显示
                     }
                     //发送显示消息，进行显示刷新
