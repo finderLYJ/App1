@@ -14,7 +14,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
-
+/*
+注释一下下面的这一段代码
+ */
 public class HomeActivity extends AppCompatActivity implements View.OnClickListener {
     private Button btn1,btn2,btn3,btn4;
     private Toolbar toolbar;
