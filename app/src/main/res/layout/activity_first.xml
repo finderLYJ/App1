@@ -25,11 +25,11 @@
             android:gravity="center"
             android:textSize="20sp"
             android:textStyle="bold"/>
-        <VideoView
+        <!--VideoView
             android:layout_width="match_parent"
             android:layout_below="@+id/title1"
             android:id="@+id/videoView1"
-            android:layout_height="300dp"/>
+            android:layout_height="300dp"/-->
     </RelativeLayout>
 
     <LinearLayout

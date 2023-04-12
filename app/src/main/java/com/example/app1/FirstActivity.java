@@ -24,8 +24,8 @@ import android.widget.VideoView;
 
 import androidx.annotation.InterpolatorRes;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.room.jarjarred.org.stringtemplate.v4.Interpreter;
 
-import org.tensorflow.lite.Interpreter;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -64,11 +64,14 @@ public class FirstActivity extends AppCompatActivity {
         scrollView = findViewById(R.id.receiveScrolView);
         tv_in = findViewById(R.id.in);
 
-        videoView=findViewById(R.id.videoView1);
+        //视频
+        /*videoView=findViewById(R.id.videoView1);
         String url="android.resource://"+getPackageName()+"/"+R.raw.hello;
         mediaController=new MediaController(FirstActivity.this);
         videoView.setVideoURI(Uri.parse(url));
         videoView.setMediaController(mediaController);
+         */
+
         backhome=findViewById(R.id.backhome1);
         backhome.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -198,7 +201,6 @@ public class FirstActivity extends AppCompatActivity {
 
         //运行模型
         tflite.run(input,output);
-
         //返回
         return output;
 
